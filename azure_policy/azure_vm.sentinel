@@ -1,9 +1,26 @@
-// The day of the week.
-param day
+# Imports mock data
+import "tfplan/v2" as tfplan
 
-// The hour of the day.
-param hour
+azure_virtual_machine = filter tfplan.resource_changes as _, rc {
+    rc.type is "azurerm_windows_virtual_machine" and
+  	rc.mode is "managed" and
+  	(rc.change.actions contains "create" or rc.change.actions contains "update" or
+     rc.change.actions contains "read" or (rc.change.actions contains "no-op" and
+     rc.change.after is not null))    
+}
 
-is_weekday = rule { day not in ["saturday", "sunday"] }
-is_open_hours = rule { hour > 8 and hour < 17 }
-main = rule { is_open_hours and is_weekday }
+mandatory_tags = [
+    "Name",
+]
+
+mandatory_instance_tags = rule {
+    all azure_virtual_machine as _, instance {
+        all mandatory_tags as mt {
+            instance.change.after.tags contains mt
+        }
+    }
+}
+
+main = rule {
+    (mandatory_instance_tags) else true
+}
