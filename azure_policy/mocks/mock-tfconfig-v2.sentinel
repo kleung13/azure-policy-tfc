@@ -1,0 +1,395 @@
+import "strings"
+
+providers = {
+	"azurerm": {
+		"alias": "",
+		"config": {
+			"client_id": {
+				"references": [
+					"data.vault_azure_access_credentials.creds.client_id",
+					"data.vault_azure_access_credentials.creds",
+				],
+			},
+			"client_secret": {
+				"references": [
+					"data.vault_azure_access_credentials.creds.client_secret",
+					"data.vault_azure_access_credentials.creds",
+				],
+			},
+			"features": [
+				{},
+			],
+			"subscription_id": {
+				"constant_value": "ec23b771-c691-4929-b109-ebf808e51506",
+			},
+			"tenant_id": {
+				"constant_value": "4328f5c5-4e1f-4b4d-b5ee-604e7fe12ccf",
+			},
+		},
+		"full_name":           "registry.terraform.io/hashicorp/azurerm",
+		"module_address":      "",
+		"name":                "azurerm",
+		"provider_config_key": "azurerm",
+		"version_constraint":  "~> 3.0",
+	},
+	"random": {
+		"alias":               "",
+		"config":              {},
+		"full_name":           "registry.terraform.io/hashicorp/random",
+		"module_address":      "",
+		"name":                "random",
+		"provider_config_key": "random",
+		"version_constraint":  "~> 3.0",
+	},
+	"vault": {
+		"alias": "",
+		"config": {
+			"address": {
+				"constant_value": "https://vault.control.acceleratorlabs.ca",
+			},
+		},
+		"full_name":           "registry.terraform.io/hashicorp/vault",
+		"module_address":      "",
+		"name":                "vault",
+		"provider_config_key": "vault",
+		"version_constraint":  "",
+	},
+}
+
+resources = {
+	"azurerm_network_interface.main": {
+		"address": "azurerm_network_interface.main",
+		"config": {
+			"ip_configuration": [
+				{
+					"name": {
+						"constant_value": "my_nic_configuration",
+					},
+					"private_ip_address_allocation": {
+						"constant_value": "Dynamic",
+					},
+					"public_ip_address_id": {
+						"references": [
+							"azurerm_public_ip.main.id",
+							"azurerm_public_ip.main",
+						],
+					},
+					"subnet_id": {
+						"references": [
+							"azurerm_subnet.default.id",
+							"azurerm_subnet.default",
+						],
+					},
+				},
+			],
+			"location": {
+				"references": [
+					"var.location",
+				],
+			},
+			"name": {
+				"references": [
+					"random_pet.main.id",
+					"random_pet.main",
+				],
+			},
+			"resource_group_name": {
+				"references": [
+					"azurerm_resource_group.main.name",
+					"azurerm_resource_group.main",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "main",
+		"provider_config_key": "azurerm",
+		"provisioners":        [],
+		"type":                "azurerm_network_interface",
+	},
+	"azurerm_public_ip.main": {
+		"address": "azurerm_public_ip.main",
+		"config": {
+			"allocation_method": {
+				"constant_value": "Dynamic",
+			},
+			"location": {
+				"references": [
+					"var.location",
+				],
+			},
+			"name": {
+				"references": [
+					"random_pet.main.id",
+					"random_pet.main",
+				],
+			},
+			"resource_group_name": {
+				"references": [
+					"azurerm_resource_group.main.name",
+					"azurerm_resource_group.main",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "main",
+		"provider_config_key": "azurerm",
+		"provisioners":        [],
+		"type":                "azurerm_public_ip",
+	},
+	"azurerm_resource_group.main": {
+		"address": "azurerm_resource_group.main",
+		"config": {
+			"location": {
+				"references": [
+					"var.region",
+				],
+			},
+			"name": {
+				"constant_value": "default-resource-group",
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "main",
+		"provider_config_key": "azurerm",
+		"provisioners":        [],
+		"type":                "azurerm_resource_group",
+	},
+	"azurerm_subnet.default": {
+		"address": "azurerm_subnet.default",
+		"config": {
+			"address_prefixes": {
+				"constant_value": [
+					"10.0.1.0/24",
+				],
+			},
+			"name": {
+				"constant_value": "default-subnet",
+			},
+			"resource_group_name": {
+				"references": [
+					"azurerm_resource_group.main.name",
+					"azurerm_resource_group.main",
+				],
+			},
+			"virtual_network_name": {
+				"references": [
+					"azurerm_virtual_network.default.name",
+					"azurerm_virtual_network.default",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "default",
+		"provider_config_key": "azurerm",
+		"provisioners":        [],
+		"type":                "azurerm_subnet",
+	},
+	"azurerm_virtual_network.default": {
+		"address": "azurerm_virtual_network.default",
+		"config": {
+			"address_space": {
+				"constant_value": [
+					"10.0.0.0/16",
+					"10.179.0.0/16",
+				],
+			},
+			"location": {
+				"references": [
+					"azurerm_resource_group.main.location",
+					"azurerm_resource_group.main",
+				],
+			},
+			"name": {
+				"constant_value": "default-network",
+			},
+			"resource_group_name": {
+				"references": [
+					"azurerm_resource_group.main.name",
+					"azurerm_resource_group.main",
+				],
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "default",
+		"provider_config_key": "azurerm",
+		"provisioners":        [],
+		"type":                "azurerm_virtual_network",
+	},
+	"azurerm_windows_virtual_machine.main": {
+		"address": "azurerm_windows_virtual_machine.main",
+		"config": {
+			"admin_password": {
+				"constant_value": "top-secret-password-ah8fg",
+			},
+			"admin_username": {
+				"constant_value": "azureuser",
+			},
+			"location": {
+				"references": [
+					"var.location",
+				],
+			},
+			"name": {
+				"references": [
+					"random_pet.main.id",
+					"random_pet.main",
+				],
+			},
+			"network_interface_ids": {
+				"references": [
+					"azurerm_network_interface.main.id",
+					"azurerm_network_interface.main",
+				],
+			},
+			"os_disk": [
+				{
+					"caching": {
+						"constant_value": "ReadWrite",
+					},
+					"name": {
+						"references": [
+							"random_pet.main.id",
+							"random_pet.main",
+						],
+					},
+					"storage_account_type": {
+						"constant_value": "Standard_LRS",
+					},
+				},
+			],
+			"resource_group_name": {
+				"references": [
+					"azurerm_resource_group.main.name",
+					"azurerm_resource_group.main",
+				],
+			},
+			"size": {
+				"constant_value": "Standard_B1ls",
+			},
+			"source_image_reference": [
+				{
+					"offer": {
+						"constant_value": "WindowsServer",
+					},
+					"publisher": {
+						"constant_value": "MicrosoftWindowsServer",
+					},
+					"sku": {
+						"constant_value": "2022-datacenter-azure-edition",
+					},
+					"version": {
+						"constant_value": "latest",
+					},
+				},
+			],
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "main",
+		"provider_config_key": "azurerm",
+		"provisioners":        [],
+		"type":                "azurerm_windows_virtual_machine",
+	},
+	"data.vault_azure_access_credentials.creds": {
+		"address": "data.vault_azure_access_credentials.creds",
+		"config": {
+			"backend": {
+				"constant_value": "azure",
+			},
+			"role": {
+				"constant_value": "keith-m-leung",
+			},
+			"subscription_id": {
+				"constant_value": "ec23b771-c691-4929-b109-ebf808e51506",
+			},
+			"validate_creds": {
+				"constant_value": true,
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "data",
+		"module_address":      "",
+		"name":                "creds",
+		"provider_config_key": "vault",
+		"provisioners":        [],
+		"type":                "vault_azure_access_credentials",
+	},
+	"random_pet.main": {
+		"address": "random_pet.main",
+		"config": {
+			"length": {
+				"constant_value": 1,
+			},
+		},
+		"count":               {},
+		"depends_on":          [],
+		"for_each":            {},
+		"mode":                "managed",
+		"module_address":      "",
+		"name":                "main",
+		"provider_config_key": "random",
+		"provisioners":        [],
+		"type":                "random_pet",
+	},
+}
+
+provisioners = {}
+
+variables = {
+	"location": {
+		"default":        "centralus",
+		"description":    "",
+		"module_address": "",
+		"name":           "location",
+	},
+	"region": {
+		"default":        "centralus",
+		"description":    "(optional) Default Azure region to deploy to.",
+		"module_address": "",
+		"name":           "region",
+	},
+	"resource_group_name": {
+		"default":        "default-resource-group",
+		"description":    "",
+		"module_address": "",
+		"name":           "resource_group_name",
+	},
+}
+
+outputs = {}
+
+module_calls = {}
+
+strip_index = func(addr) {
+	s = strings.split(addr, ".")
+	for s as i, v {
+		s[i] = strings.split(v, "[")[0]
+	}
+
+	return strings.join(s, ".")
+}
