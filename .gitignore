@@ -10,7 +10,7 @@ log/*.log
 tmp/**
 node_modules/
 .sass-cache
-
+mock-*
 # Terraform
 .terraform*
 *.tfstate*

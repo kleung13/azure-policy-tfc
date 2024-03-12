@@ -1,0 +1,20 @@
+import "tfplan/v2" as tfplan
+
+azure_storage_account = filter tfplan.resource_changes as _, rc {
+	rc.mode is "managed" and
+		rc.type is "azurerm_storage_account" and
+  	(rc.change.actions contains "create" or rc.change.actions contains "update" or
+     rc.change.actions contains "read" or (rc.change.actions contains "no-op" and
+     rc.change.after is not null))    
+}
+
+enable_https_traffic_only_is_true = rule {
+	all azure_storage_account as _, accounts {
+		accounts.change.after.enable_https_traffic_only is true
+	}
+}
+
+// Ensure that 'Secure transfer required' is set to Enabled.
+main = rule {
+	enable_https_traffic_only_is_true
+}
