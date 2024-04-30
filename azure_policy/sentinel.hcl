@@ -8,6 +8,6 @@ policy "azurerm_storage_account "{
 }
 
 policy "azurerm_general "{
-    source = "./azure_general"
+    source = "./azure_general/sentinel.hcl"
     enforcement_level = "soft-mandatory"
 }
