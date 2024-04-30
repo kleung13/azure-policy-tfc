@@ -1,7 +1,3 @@
-import "module" "azure-functions" {
-    source = "./azure-functions/azure-functions.sentinel"
-}
-
 import "module" "tfplan-functions" {
     source = "../common-functions/tfplan-functions/tfplan-functions.sentinel"
 }
